@@ -27,24 +27,26 @@ begin
   begin
     produceEvent.WaitForSignal();
 
-    data := sharedData.BeginAccess;
+    try
+      data := sharedData.BeginAccess;
 
-    // check if other program quit, if so we do too
-    if (sharedData.Abandoned) then
-      exit;
+      // check if other program quit, if so we do too
+      if (sharedData.Abandoned) then
+        exit;
 
-    WriteLn('Enter two numbers:');
-    ReadLn(v1, v2);
+      WriteLn('Enter two numbers:');
+      ReadLn(v1, v2);
 
-    data^.Value1 := v1;
-    data^.Value2 := v2;
-    data^.HasInput := True;
+      data^.Value1 := v1;
+      data^.Value2 := v2;
+      data^.HasInput := True;
 
-    // signal the output process that
-    // the data is ready
-    consumeEvent.Signal;
-
-    sharedData.EndAccess;
+      // signal the output process that
+      // the data is ready
+      consumeEvent.Signal;
+    finally
+      sharedData.EndAccess;
+    end;
   end;
 end;
 

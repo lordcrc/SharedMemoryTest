@@ -31,20 +31,22 @@ begin
     // wait for it to deliver
     consumeEvent.WaitForSignal();
 
-    data := sharedData.BeginAccess;
+    try
+      data := sharedData.BeginAccess;
 
-    // check if other program quit, if so we do too
-    if (sharedData.Abandoned) then
-      exit;
+      // check if other program quit, if so we do too
+      if (sharedData.Abandoned) then
+        exit;
 
-    if (data^.HasInput) then
-    begin
-      data^.HasInput := False;
-      WriteLn(Format('%d + %d = %d', [data^.Value1, data^.Value2, (data^.Value1 + data^.Value2)]));
-      WriteLn;
+      if (data^.HasInput) then
+      begin
+        data^.HasInput := False;
+        WriteLn(Format('%d + %d = %d', [data^.Value1, data^.Value2, (data^.Value1 + data^.Value2)]));
+        WriteLn;
+      end;
+    finally
+      sharedData.EndAccess;
     end;
-
-    sharedData.EndAccess;
   end;
 end;
 
