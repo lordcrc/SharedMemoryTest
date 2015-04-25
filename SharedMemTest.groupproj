@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{BA299805-AC3C-464F-95F0-168DEAA1A2D0}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="SharedMemConsumer.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="SharedMemProducer.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SharedMemConsumer">
+        <MSBuild Projects="SharedMemConsumer.dproj"/>
+    </Target>
+    <Target Name="SharedMemConsumer:Clean">
+        <MSBuild Projects="SharedMemConsumer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SharedMemConsumer:Make">
+        <MSBuild Projects="SharedMemConsumer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SharedMemProducer">
+        <MSBuild Projects="SharedMemProducer.dproj"/>
+    </Target>
+    <Target Name="SharedMemProducer:Clean">
+        <MSBuild Projects="SharedMemProducer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SharedMemProducer:Make">
+        <MSBuild Projects="SharedMemProducer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SharedMemConsumer;SharedMemProducer"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SharedMemConsumer:Clean;SharedMemProducer:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SharedMemConsumer:Make;SharedMemProducer:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
